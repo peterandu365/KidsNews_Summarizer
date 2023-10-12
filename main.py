@@ -1,44 +1,67 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from time import sleep
 import requests
 from bs4 import BeautifulSoup
 import openai
-import datetime
+import os
 
-# Parameters
 URL = "https://www.cbc.ca/kidsnews/"
-openai.api_key = 'YOUR_OPENAI_API_KEY'
-grade_number = 3
-word_count = 50
 
-# Fetch the top three article links from Kids News homepage
-response = requests.get(URL)
-soup = BeautifulSoup(response.content, 'html.parser')
-article_links = [a['href'] for a in soup.find_all('a', href=True) if a['href'].startswith("/kidsnews/post/")]
-top_three_links = list(set(article_links[:3]))  # Use set to remove duplicates and then get the top three
+# Set up Selenium, using Chrome as an example here
+driver = webdriver.Chrome()
+
+# Open the webpage
+driver.get(URL)
+
+# Wait for the page to load
+sleep(5)
+
+# Find the article links
+article_links = driver.find_elements(By.CSS_SELECTOR, "a[href^='/kidsnews/post/']")
+
+# Get the first three links
+top_three_links = [link.get_attribute('href') for link in article_links[:3]]
 
 # Extract content from each article link
 articles = []
+
 for link in top_three_links:
-    response = requests.get("https://www.cbc.ca" + link)
+    response = requests.get(link)
     soup = BeautifulSoup(response.content, 'html.parser')
-    article_content = soup.find('div', {'class': 'story'}).text
-    articles.append(article_content)
+    
+    # Search for the correct div containing the article content
+    article_content = soup.find('div', {'class': 'content'})
+    
+    if article_content:
+        articles.append(article_content.text)
 
-# Use OpenAI API to rewrite article content
-shortened_articles = []
+# Close the Selenium browser
+driver.close()
+
+# OpenAI API setup
+openai.api_key = 'YOUR_OPENAI_API_KEY'
+
+import time
+
+# Summarize articles using openai.ChatCompletion
+summarized_articles = []
+
 for article in articles:
-    prompt = f"Please summarize the following news article for a grade {grade_number} student. Keep it under {word_count} words:\n\n{article}"
-    response = openai.Completion.create(
-        engine="davinci",
-        prompt=prompt,
-        max_tokens=word_count
+    response = openai.ChatCompletion.create(
+      model="gpt-4",
+      messages=[
+            {"role": "system", "content": "Summarize the following article for a Grade 3 student in 50 words:"},
+            {"role": "user", "content": article}
+        ]
     )
-    shortened_articles.append(response.choices[0].text.strip())
+    summarized_articles.append(response['choices'][0]['message']['content'].strip())
+    
+    # Wait for 20 seconds before processing the next article to avoid rate limits
+    time.sleep(20)
 
-# Save to a file with date as prefix
-today_date = datetime.date.today().strftime('%Y%m%d')
-for idx, summary in enumerate(shortened_articles):
-    title = summary.split('.')[0].replace(' ', '_').replace(',', '')  # Use the first sentence of the summary as filename
-    with open(f"{today_date}_{title}.txt", "w") as file:
-        file.write(summary)
-
-print("Summaries generated and saved!")
+# Save to a file
+date_str = datetime.now().strftime("%Y%m%d")
+for i, summary in enumerate(summarized_articles):
+    with open(f"{date_str}_Article_{i + 1}.txt", 'w') as f:
+        f.write(summary)
