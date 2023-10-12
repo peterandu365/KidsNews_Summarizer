@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import openai
 import os
 
-URL = "https://www.cbc.ca/kidsnews/"
+URL = "https://www.AFictionalSite.ca/kidsnews/"
 
 # Set up Selenium, using Chrome as an example here
 driver = webdriver.Chrome()

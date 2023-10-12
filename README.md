@@ -1,50 +1,50 @@
 # KidsNews_Summarizer
 
-This repository contains an automated script to fetch top articles from the CBC Kids News website, and then summarizes them using OpenAI's API.
+This repository contains an automated script designed to fetch top articles from a fictional Kids News website and then summarize them using OpenAI's API. This tool serves solely as a demonstration of how to employ Python libraries and the OpenAI API, without any operational intent.
 
 ## Changelog
 
 ### Latest Update (Version 2.0):
-- **Web Scraping Enhancement**: Previously, we used BeautifulSoup for static web scraping. This version introduces Selenium, which allows us to handle dynamic web pages where content might load asynchronously.
+- **Web Scraping Enhancement**: Transitioned from BeautifulSoup (used for static web scraping) to Selenium, enabling handling of dynamic web pages where content loads asynchronously.
   
-- **Summarization Upgrade**: The script now uses `openai.ChatCompletion` for a more refined and context-aware summarization.
+- **Summarization Upgrade**: Now incorporates `openai.ChatCompletion` to achieve a more refined and contextually aware summarization.
 
-- **Rate Limit Handling**: To avoid OpenAI's API rate limits, a delay is added between successive API calls.
+- **Rate Limit Handling**: Implemented a delay mechanism between consecutive API calls to avoid hitting OpenAI's API rate limits.
 
-- **Code Organization**: The structure of the code has been revised to be more readable and maintainable.
+- **Code Organization**: Revamped code structure to enhance readability and maintainability.
 
 ### Initial Release (Version 1.0):
-- The script was capable of fetching top articles and summarizing them using OpenAI's Completion API.
-- Used BeautifulSoup for web scraping.
+- Originally capable of fetching top articles and summarizing them via the OpenAI Completion API.
+- Utilized BeautifulSoup for web scraping.
 
 ## Setup
 
-1. Make sure you have Selenium and the necessary WebDriver (e.g., ChromeDriver) installed.
-2. Update the `openai.api_key` in the script with your OpenAI API key.
-3. Run the script and the summaries will be saved in the current directory with the date as a prefix.
+1. Ensure Selenium is installed along with the necessary WebDriver (e.g., ChromeDriver).
+2. Update the `openai.api_key` in the script to your OpenAI API key.
+3. Execute the script. Summaries will be saved in the current directory with a date as the prefix.
 
 ## Usage
 
-Simply run the script:
+Execute the script as follows:
 
 ```
 python kidsnews_summarizer.py
 ```
 
-After execution, the script will fetch the top three articles, summarize them, and save each summary as a `.txt` file in the current directory.
+Post-execution, the script fetches the top three articles, summarizes them, and saves each summary as a `.txt` file in the directory.
 
 ## Future Improvements
 
-- Enhance error handling to cater for possible web scraping issues.
-- Introduce flexibility to summarize more than three articles if needed.
+- Augment error handling to address potential web scraping complications.
+- Modify to allow summarization of more than just three articles if required.
 
 ## Contribution
 
-Suggestions, improvements, and fixes are always welcome!
+Open to suggestions, improvements, and bug fixes!
 
 ## Citation
 
-If you use this tool in your project or research, please cite:
+For referencing this tool in projects or research:
 
 ```
 Peter Xu, Kids News Summarizer, https://github.com/peterandu365/KidsNews_Summarizer, 2023
@@ -52,9 +52,10 @@ Peter Xu, Kids News Summarizer, https://github.com/peterandu365/KidsNews_Summari
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project comes under the MIT License. For comprehensive details, refer to the [LICENSE](LICENSE) document.
 
+---
 
+**Disclaimer**: This project is purely for demonstration purposes on how to use Python libraries and the OpenAI API and is not intended for any operational use. It is not associated with or representative of any real news site; all mentioned news sources are fictional. Any actions taken using this project are at the user's own risk.
 
-
-
+---
